@@ -1,0 +1,7 @@
+import { useEffect, useState } from "react";
+export default function InputDialog({ open, title, message, label = "Reason", placeholder = "Enter a reason...", initialValue = "", submitLabel = "Submit", danger = false, onSubmit, onCancel }) {
+  const [value, setValue] = useState(initialValue);
+  useEffect(() => { if (open) setValue(initialValue); }, [open, initialValue]);
+  if (!open) return null;
+  return <div className="fixed inset-0 z-[120] grid place-items-center bg-black/70 p-5 backdrop-blur-sm" role="dialog" aria-modal="true"><form onSubmit={(e) => { e.preventDefault(); onSubmit(value); }} className="w-full max-w-md rounded-3xl border border-[#2b4050] bg-[#0c1a26] p-6 shadow-[0_30px_100px_rgba(0,0,0,.5)]"><h2 className="text-xl font-extrabold text-white">{title}</h2>{message && <p className="mt-2 text-sm leading-6 text-[#849b9d]">{message}</p>}<label className="mt-5 block text-xs font-bold text-[#b9cbc7]">{label}</label><textarea autoFocus value={value} onChange={(e) => setValue(e.target.value)} placeholder={placeholder} className="input mt-2 min-h-28 resize-none" /><div className="mt-6 flex justify-end gap-3"><button type="button" onClick={onCancel} className="rounded-xl border border-[#2b4050] px-4 py-2.5 text-sm font-bold text-[#b8c7c5] hover:bg-white/[.04]">Cancel</button><button type="submit" className={`rounded-xl px-4 py-2.5 text-sm font-bold ${danger ? "bg-[#8f3e47] text-white hover:bg-[#a54953]" : "bg-[#9ee8c0] text-[#06251b] hover:brightness-105"}`}>{submitLabel}</button></div></form></div>;
+}
