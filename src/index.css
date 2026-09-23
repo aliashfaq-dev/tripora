@@ -108,7 +108,7 @@ textarea { line-height: 1.55; }
 /* Existing dark utility classes are normalized safely using exact class tokens.
    Attribute selectors avoid the malformed arbitrary-class selectors that caused
    the previous theme parser failure. */
-:root[data-theme="light"] [class~="text-white"] { color:#17251f !important; }
+:root[data-theme="light"] [class~="text-white"] { color:#f0fff9 !important; }
 :root[data-theme="light"] [class~="text-[#edf4f2]"],
 :root[data-theme="light"] [class~="text-[#eef5f3]"],
 :root[data-theme="light"] [class~="text-[#e9f2ef]"],

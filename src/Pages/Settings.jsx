@@ -160,7 +160,7 @@ export default function Settings() {
           <label className="block"><span className="input-label">Username</span><input className="input" value={profile.name} onChange={(e)=>setProfile({...profile,name:e.target.value})} disabled={saving || usernameLocked}/>{usernameLocked && <span className="input-help text-amber-300">You can change your username again in {usernameWait} day{usernameWait === 1 ? "" : "s"}.</span>}</label>
           <PhoneInput value={profile.phone} onChange={(phone) => setProfile({ ...profile, phone })} disabled={saving} />
           <div className="flex flex-col gap-4 rounded-2xl border border-[#203442] bg-[#0b1722] p-4 sm:flex-row sm:items-center sm:justify-between"><div className="min-w-0"><p className="text-sm font-bold">Show phone number on my trip posts</p><p className="mt-1 text-xs leading-5 text-[#71878b]">{privacyText}</p></div><button type="button" role="switch" aria-checked={profile.showPhoneInPost} onClick={()=>setProfile({...profile,showPhoneInPost:!profile.showPhoneInPost})} className={`relative h-7 w-12 shrink-0 rounded-full transition ${profile.showPhoneInPost ? "bg-[#72d5a0]" : "bg-[#263746]"}`}><span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition ${profile.showPhoneInPost ? "left-6" : "left-1"}`}/></button></div>
-          <button disabled={saving} className="btn max-w-[210px]">{saving ? "Saving..." : <><Check size={16}/>Save profile</>}</button>
+          <button disabled={saving} className="btn  max-w-[210px] ">{saving ? "Saving..." : <><Check size={16}/>Save profile</>}</button>
         </form>
       </Section>}
 
