@@ -66,7 +66,7 @@ export default function Profile() {
           </div>
 
           <div className="mt-6 flex justify-end">
-            <a href="/settings" className="rounded-xl bg-[#123b30] px-5 py-3 text-sm font-extrabold text-[#06251b]">Edit profile & settings</a>
+            <a href="/settings" className="rounded-xl bg-[#9ee8c0] px-5 py-3 text-sm font-extrabold text-[#06251b]">Edit profile & settings</a>
           </div>
         </div>
       </div>
