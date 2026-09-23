@@ -43,14 +43,17 @@ api.interceptors.response.use(
         refreshPromise = axios.post(
           `${API_BASE_URL}/auth/refresh-token`,
           { refreshToken: refresh },
-          { timeout: 20000 }
+          { timeout: 20000, withCredentials: true, headers: { "Content-Type": "application/json" } }
         ).then((res) => {
-          const data = res?.data?.data || {};
-          if (!data.accessToken) throw new Error("Refresh failed.");
-          localStorage.setItem("accessToken", data.accessToken);
-          localStorage.setItem("token", data.accessToken);
-          if (data.refreshToken) localStorage.setItem("refreshToken", data.refreshToken);
-          return data;
+          const root = res?.data?.data || res?.data || {};
+          const data = root?.data && typeof root.data === "object" ? root.data : root;
+          const nextAccessToken = data?.accessToken || data?.token || data?.access_token;
+          const nextRefreshToken = data?.refreshToken || data?.refresh_token;
+          if (!nextAccessToken) throw new Error("Refresh failed: no access token returned.");
+          localStorage.setItem("accessToken", nextAccessToken);
+          localStorage.setItem("token", nextAccessToken);
+          if (nextRefreshToken) localStorage.setItem("refreshToken", nextRefreshToken);
+          return { accessToken: nextAccessToken, refreshToken: nextRefreshToken };
         }).finally(() => { refreshPromise = null; });
       }
       const data = await refreshPromise;

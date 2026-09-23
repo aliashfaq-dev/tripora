@@ -54,6 +54,7 @@ export function Footer({ onComingSoon }) {
         <details><summary>Company</summary><div className="tripora-footer-links"><button type="button" onClick={() => comingSoon("About Tripora")}>About Tripora</button></div></details>
         <details><summary>Follow</summary><div className="tripora-footer-links"><button type="button" onClick={() => comingSoon("Instagram")}>Instagram</button><button type="button" onClick={() => comingSoon("TikTok")}>TikTok</button><button type="button" onClick={() => comingSoon("X")}>X</button></div></details>
       </div>
+      <div className="tripora-footer-mobile-meta"><span>🌐</span><span>Tripora</span></div>
       <div className="tripora-footer-mobile-copy">© 2026 Tripora. All rights reserved.<br/>Travel smarter. Experience more.</div>
     </div>
   </footer>;

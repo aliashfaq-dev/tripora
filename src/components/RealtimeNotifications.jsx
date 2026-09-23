@@ -7,6 +7,7 @@ import { createChatSocket } from "../api/socket";
 import { getChats, getChatMessages } from "../api/chat";
 import { getMyPosts } from "../api/posts";
 import { getBookings, getOwnedBookings } from "../api/bookings";
+import { getNotifications, markNotificationRead, markChatRead } from "../api/notifications";
 import { getList, unwrap } from "../api/response";
 import { fetchAllPages } from "../api/pagination";
 
@@ -334,9 +335,36 @@ export default function RealtimeNotifications() {
   const refreshNotifications = useCallback(async () => {
     if (!isAuthenticated || !uid) return;
 
-    // The deployed API does not expose /notifications. Do not probe a known
-    // missing route on every poll; live/local notifications are populated from
-    // chat events and the activity fallbacks below.
+    // Load the backend notification feed first. This is the authoritative
+    // source for likes, bookings, messages and other server-side events.
+    // Local/activity fallbacks below remain useful for deployments that do not
+    // provide the feed yet.
+    try {
+      const response = await getNotifications();
+      const serverItems = getList(response, ["notifications", "items", "results"]);
+      if (serverItems.length) {
+        const normalized = serverItems
+          .map((entry) => normalizeActivity(entry, entry?.type || "activity"))
+          .filter(Boolean)
+          .map((item) => ({
+            ...item,
+            read: Boolean(item.raw?.read || item.raw?.isRead),
+          }));
+
+        setItems((previous) => {
+          const merged = [...normalized, ...previous]
+            .filter(Boolean)
+            .sort((a, b) => b.at - a.at)
+            .filter((item, index, all) => keyOf(item) && all.findIndex((other) => keyOf(other) === keyOf(item)) === index)
+            .slice(0, 80);
+          persist(merged);
+          return merged;
+        });
+        setUnread(normalized.filter((item) => !item.read).length);
+      }
+    } catch {
+      // The fallback activity sources below can still populate notifications.
+    }
 
     // Favorites/likes fallback.
     try {
@@ -586,6 +614,15 @@ export default function RealtimeNotifications() {
     setItems(next);
     persist(next);
 
+    await Promise.all(next.map(async (item) => {
+      const notificationId = item?.id;
+      if (notificationId) {
+        try { await markNotificationRead(notificationId); } catch { /* optional */ }
+      }
+      if (item?.chatId) {
+        try { await markChatRead(item.chatId); } catch { /* optional */ }
+      }
+    }));
   };
 
   const openNotification = (item) => {
@@ -607,7 +644,7 @@ export default function RealtimeNotifications() {
   };
 
   return (
-    <div className="relative">
+    <div className="relative tripora-notification-root">
       <button
         type="button"
         aria-label="Notifications"
@@ -616,7 +653,7 @@ export default function RealtimeNotifications() {
           setOpen((value) => !value);
           if (!open) markNotificationsRead();
         }}
-        className="relative grid h-10 w-10 place-items-center rounded-xl border border-[#263746] tp-control transition hover:brightness-95"
+        className="relative grid h-10 w-10 min-h-10 min-w-10 place-items-center rounded-xl border border-[#263746] tp-control transition hover:brightness-95"
       >
         <Bell size={17} />
         {badge > 0 && (
@@ -627,7 +664,7 @@ export default function RealtimeNotifications() {
       </button>
 
       {open && (
-        <div className="tp-menu absolute right-0 top-[calc(100%+10px)] z-[120] w-[360px] overflow-hidden rounded-2xl border shadow-[0_25px_70px_rgba(0,0,0,.2)]">
+        <div className="tp-menu tp-notification-menu absolute right-0 top-[calc(100%+10px)] z-[120] w-[360px] max-w-[calc(100vw-24px)] overflow-hidden rounded-2xl border shadow-[0_25px_70px_rgba(0,0,0,.2)]">
           <div className="flex items-center justify-between border-b border-[#1d2d39] px-4 py-3">
             <div>
               <p className="text-sm font-extrabold tp-heading">Notifications</p>

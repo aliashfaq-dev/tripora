@@ -27,8 +27,9 @@ import AdminBookings from "./Pages/AdminBookings";
 import AccountRestricted from "./Pages/AccountRestricted";
 
 function Root() {
-  const { loading } = useSelector((s) => s.auth);
+  const { loading, user, isAuthenticated } = useSelector((s) => s.auth);
   if (loading) return <div className="min-h-screen bg-[#08131f]" />;
+  if (isAuthenticated && user?.role === "ADMIN") return <Navigate to="/admin" replace />;
   return <Home />;
 }
 
@@ -50,7 +51,7 @@ export default function App() {
             <Route path="/account-restricted" element={<AccountRestricted />} />
           </Route>
 
-          <Route element={<RoleRoute roles={["USER", "SELLER"]} />}>
+          <Route element={<RoleRoute roles={["USER"]} />}>
             <Route path="/dashboard" element={<UserDashboard />} />
             <Route path="/my-trips" element={<UserPosts />} />
             <Route path="/analytics" element={<UserAnalytics />} />

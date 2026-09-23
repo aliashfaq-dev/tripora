@@ -8,7 +8,7 @@ export const createBooking = (tripId, data = {}) => {
 };
 
 // Traveler booking list/detail.
-export const getBookings = (params = {}) => api.get("/bookings", { params });
+export const getBookings = (params = {}) => api.get("/users/bookings", { params });
 
 export const getBooking = (id) => {
   const value = id?._id || id?.id || id;
@@ -25,17 +25,7 @@ export const cancelBooking = (id, reason) => {
 };
 
 // Seller incoming bookings.
-export const getOwnedBookings = async (params = {}) => {
-  try {
-    return await api.get("/seller/bookings", { params });
-  } catch (error) {
-    // Older Tripora deployments exposed the same seller-owned list under this
-    // route. Keep it only as a 404 compatibility fallback; the documented
-    // endpoint above remains the primary contract.
-    if (![403, 404].includes(error?.response?.status)) throw error;
-    return api.get("/users/owned-bookings", { params });
-  }
-};
+export const getOwnedBookings = (params = {}) => api.get("/users/owned-bookings", { params });
 
 // Seller booking action: status is CONFIRMED or REJECTED.
 export const updateBookingStatus = (id, status) => {
