@@ -222,3 +222,285 @@ textarea { line-height: 1.55; }
 .tp-dialog-confirm:hover { filter:brightness(1.06); transform:translateY(-1px); }
 .tp-dialog-danger { background:#a94450; border-color:#a94450; color:#fff; }
 .tp-dialog-danger:hover { background:#933b46; }
+
+/* ================================================================
+   Tripora responsive hardening
+   Keeps every existing feature/layout intact while preventing fixed
+   widths, dense controls and desktop grids from overflowing small screens.
+   ================================================================ */
+html, body, #root { width: 100%; max-width: 100%; overflow-x: hidden; }
+body { -webkit-text-size-adjust: 100%; }
+#root, .tripora-app, .tripora-shell, main, main > * { min-width: 0; }
+img, svg, video, canvas { max-width: 100%; }
+button, a, input, textarea, select { max-width: 100%; }
+
+/* Long content should never force the viewport wider. */
+.tripora-app h1, .tripora-app h2, .tripora-app h3, .tripora-app h4,
+.tripora-app p, .tripora-app span, .tripora-app a, .tripora-app button,
+.tripora-app label { overflow-wrap: anywhere; }
+.tripora-app .truncate { overflow: hidden !important; overflow-wrap: normal !important; }
+
+/* Large screens: use available width without allowing giant layouts. */
+@media (min-width: 1440px) {
+  .tripora-section { padding-left: clamp(24px, 4vw, 72px); padding-right: clamp(24px, 4vw, 72px); }
+}
+
+/* Tablet / smaller laptops. */
+@media (max-width: 1100px) {
+  .tripora-section { padding-top: 64px; padding-bottom: 64px; }
+
+  /* Prevent common two-column page layouts from becoming cramped. */
+  .tripora-app [class*="grid-cols-[1fr_430px]"],
+  .tripora-app [class*="grid-cols-[1fr_370px]"],
+  .tripora-app [class*="grid-cols-[190px_minmax(0,1fr)]"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .tripora-app [class*="grid-cols-[1.05fr_.95fr]"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .tripora-app [class*="grid-cols-[290px_1fr]"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .tripora-app [class*="max-w-[1280px]"],
+  .tripora-app [class*="max-w-[1180px]"],
+  .tripora-app [class*="max-w-[1120px]"] {
+    max-width: 100% !important;
+  }
+}
+
+/* Phones and narrow tablets. */
+@media (max-width: 768px) {
+  .tripora-section { padding: 48px 16px; }
+  .page-title { font-size: clamp(1.9rem, 8vw, 2.7rem) !important; line-height: 1.05; }
+  .page-subtitle { font-size: .9rem; line-height: 1.6; }
+  .tripora-title { letter-spacing: -.04em; }
+
+  /* Header */
+  .tripora-app > header {
+    height: 64px !important;
+    min-height: 64px;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    gap: 8px;
+  }
+  .tripora-app > header > div { min-width: 0; }
+  .tripora-app > header h1 { max-width: 42vw; font-size: 13px !important; }
+  .tripora-app > header .tp-control,
+  .tripora-app > header .tp-profile { flex-shrink: 0; }
+  .tripora-app > header .tp-profile { padding-left: 5px; padding-right: 5px; }
+
+  /* Mobile drawer */
+  .tripora-app .tripora-sidebar {
+    width: min(86vw, 320px) !important;
+    max-width: 320px;
+  }
+
+  /* Footer */
+  .tripora-footer { padding: 40px 16px 24px !important; }
+  .tripora-footer > div:first-child { grid-template-columns: 1fr !important; gap: 26px !important; }
+  .tripora-footer > div:last-child { flex-direction: column; align-items: flex-start; gap: 8px; }
+
+  /* Generic dense rows/toolbars become stacked. */
+  .tripora-app .analytics-toolbar,
+  .tripora-app .results-head,
+  .tripora-app .premium-filter-top {
+    align-items: stretch;
+  }
+  .tripora-app .analytics-toolbar > *,
+  .tripora-app .results-head > * { max-width: 100%; }
+
+  /* Action rows: buttons may wrap instead of squeezing/overflowing. */
+  .tripora-app .my-post-actions,
+  .tripora-app .tp-dialog-actions,
+  .tripora-app .analytics-toolbar,
+  .tripora-app [class*="flex"][class*="gap-"] {
+    min-width: 0;
+  }
+
+  .tripora-app .post-action-btn,
+  .tripora-app .tripora-btn,
+  .tripora-app .btn,
+  .tripora-app .auth-submit {
+    min-height: 44px;
+  }
+
+  /* Dialogs/modals */
+  .tp-dialog-backdrop,
+  .restriction-backdrop { padding: 12px; }
+  .tp-dialog,
+  .restriction-modal { width: 100%; max-width: 100%; border-radius: 20px; padding: 18px; }
+  .tp-dialog-actions { flex-wrap: wrap; }
+  .tp-dialog-actions > button { flex: 1 1 140px; }
+
+  /* Cards/images */
+  .trip-card-premium .trip-image { height: clamp(190px, 52vw, 250px); }
+  .trip-card-premium .trip-body { padding: 16px; }
+  .trip-card-premium .trip-body > div:last-child { gap: 10px; flex-wrap: wrap; }
+  .premium-card, .tripora-card { border-radius: 20px; }
+  .admin-hero { padding: 20px; border-radius: 20px; }
+
+  /* Search/filter panels */
+  .premium-filter-shell { width: 100%; max-width: 100%; }
+  .premium-filter-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  .premium-search-wrap,
+  .premium-search-btn { grid-column: auto !important; width: 100%; }
+  .premium-search-btn { justify-content: center; }
+  .premium-search kbd { display: none; }
+
+  /* Tables / data-heavy sections: scroll horizontally rather than break page width. */
+  .tripora-app .overflow-x-auto,
+  .tripora-app [class*="overflow-x-auto"] { max-width: 100%; -webkit-overflow-scrolling: touch; }
+  .tripora-app table { max-width: none; }
+
+  /* Forms */
+  .tripora-app .input,
+  .tripora-app .auth-input,
+  .tripora-app textarea,
+  .tripora-app select { max-width: 100%; font-size: 16px; }
+  .tripora-app textarea { min-height: 110px; }
+
+  /* Chat */
+  .chat-shell { width: 100% !important; max-width: 100%; border-radius: 18px !important; }
+  .chat-shell > main { min-width: 0 !important; }
+  .chat-message-scroll { min-width: 0 !important; }
+  .chat-composer { max-width: 100%; }
+}
+
+/* Very small phones (320–480px). */
+@media (max-width: 480px) {
+  .tripora-section { padding: 38px 12px; }
+  .tripora-display { font-size: clamp(2.7rem, 14vw, 3.6rem) !important; }
+  .trips-hero { padding: 58px 0 86px !important; }
+  .trips-display { font-size: clamp(2.8rem, 15vw, 4.2rem) !important; }
+  .trips-lead { font-size: 14px; line-height: 1.6; }
+
+  .tripora-app > header h1 { max-width: 34vw; font-size: 12px !important; }
+  .tripora-app > header .tp-control { width: 38px; height: 38px; }
+  .tripora-app > header .tp-profile { height: 40px; }
+
+  .premium-filter-shell { padding: 14px; border-radius: 18px; }
+  .premium-search,
+  .premium-select-trigger,
+  .premium-search-btn { height: 48px; }
+  .results-meta { flex-direction: column; }
+  .results-meta span { width: 100%; }
+
+  .kpi-grid { grid-template-columns: 1fr !important; }
+  .kpi-card, .stat-card, .chart-panel { padding: 16px; border-radius: 18px; }
+
+  .trip-card-premium .trip-body { padding: 14px; }
+  .trip-card-premium .trip-body > div:first-child { gap: 8px; }
+  .trip-card-premium .trip-body > div:last-child { align-items: stretch; flex-direction: column; }
+  .trip-card-premium .trip-body > div:last-child > * { width: 100%; }
+
+  .my-post-actions { display: grid !important; grid-template-columns: minmax(0, 1fr); width: 100%; }
+  .my-post-actions > * { width: 100%; }
+
+  .tp-dialog-actions { display: grid; grid-template-columns: 1fr; }
+  .tp-dialog-actions > button { width: 100%; }
+
+  .restriction-modal { max-height: 94dvh; padding: 16px; }
+  .restriction-reason, .restriction-appeal { padding: 14px; }
+
+  /* Don't let icon + text controls overflow. */
+  .tripora-app button { white-space: normal; }
+  .tripora-app .post-action-btn { width: 100%; }
+
+  /* Phone fields and compound controls stack cleanly. */
+  .tripora-app [class*="grid-cols-2"],
+  .tripora-app [class*="grid-cols-3"],
+  .tripora-app [class*="grid-cols-4"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
+/* 320px safety net. */
+@media (max-width: 360px) {
+  .tripora-app > header { padding-left: 7px !important; padding-right: 7px !important; }
+  .tripora-app > header h1 { max-width: 28vw; }
+  .tripora-app > header .tp-control { width: 36px; height: 36px; }
+  .tripora-section { padding-left: 10px; padding-right: 10px; }
+  .premium-filter-shell { padding: 12px; }
+  .tripora-btn, .btn, .auth-submit { padding-left: 12px; padding-right: 12px; }
+}
+
+/* Landscape phones: use width efficiently while keeping controls touchable. */
+@media (max-width: 900px) and (orientation: landscape) {
+  .tripora-app > header { height: 60px !important; }
+  .tripora-section { padding-top: 34px; padding-bottom: 34px; }
+  .restriction-modal { max-height: 88dvh; }
+}
+
+/* Touch devices: avoid hover-only UI as the only visual affordance. */
+@media (hover: none) and (pointer: coarse) {
+  .tripora-card:hover,
+  .premium-card:hover,
+  .trip-card-premium:hover,
+  .kpi-card:hover,
+  .stat-card:hover { transform: none; }
+  .favorite-button:hover { transform: none; }
+  .tripora-app button, .tripora-app a { touch-action: manipulation; }
+}
+
+/* Mobile footer: compact accordion pattern inspired by modern travel sites. */
+.tripora-footer-mobile { display:none; }
+@media (max-width: 768px) {
+  .tripora-footer-desktop { display:none !important; }
+  .tripora-footer-mobile { display:block; padding:24px 16px 18px; }
+  .tripora-footer-brand { display:flex; align-items:center; gap:10px; }
+  .tripora-footer-accordions { border-top:1px solid var(--tp-line); }
+  .tripora-footer-accordions details { border-bottom:1px solid var(--tp-line); }
+  .tripora-footer-accordions summary { list-style:none; min-height:58px; display:flex; align-items:center; justify-content:space-between; gap:16px; cursor:pointer; font-size:15px; font-weight:800; color:var(--tp-text); }
+  .tripora-footer-accordions summary::-webkit-details-marker { display:none; }
+  .tripora-footer-accordions summary::after { content:'⌄'; font-size:18px; color:var(--tp-muted); transition:transform .18s ease; }
+  .tripora-footer-accordions details[open] summary::after { transform:rotate(180deg); }
+  .tripora-footer-links { display:grid; gap:14px; padding:0 0 18px; }
+  .tripora-footer-links a, .tripora-footer-links button { color:var(--tp-muted); font-size:14px; text-align:left; }
+  .tripora-footer-mobile-meta { display:flex; align-items:center; justify-content:center; gap:12px; min-height:58px; border-bottom:1px solid var(--tp-line); font-size:14px; font-weight:700; }
+  .tripora-footer-mobile-copy { padding-top:18px; text-align:center; color:var(--tp-muted); font-size:12px; line-height:1.7; }
+
+  /* Chat: preserve usable proportions on phones instead of shrinking every child. */
+  .chat-page-shell { min-width:0 !important; width:100% !important; }
+  .chat-page-shell .chat-shell { height:calc(100dvh - 150px) !important; min-height:430px !important; width:100% !important; }
+  .chat-page-shell .chat-message-scroll { padding:14px !important; }
+  .chat-page-shell .chat-message-scroll .chat-message > div { max-width:88% !important; font-size:13px; line-height:1.45; }
+  .chat-page-shell .chat-composer { min-width:0 !important; width:100% !important; }
+}
+@media (max-width: 480px) {
+  .tripora-footer-mobile { padding-left:14px; padding-right:14px; }
+  .chat-page-shell { padding-left:0 !important; padding-right:0 !important; }
+  .chat-page-shell > .chat-page-heading { padding-left:12px; padding-right:12px; }
+  .chat-page-shell > .chat-mode-shell { margin-left:12px; margin-right:12px; }
+  .chat-page-shell .chat-shell { border-radius:14px !important; min-height:420px !important; height:calc(100dvh - 142px) !important; }
+  .chat-page-shell .chat-shell main header { padding-left:10px !important; padding-right:8px !important; height:58px !important; }
+  .chat-page-shell .chat-shell main header .chat-icon-action { width:34px; height:34px; }
+  .chat-page-shell .chat-shell main > .border-t { padding:8px !important; }
+  .chat-page-shell .chat-shell main > .border-t > .flex { gap:6px; }
+  .chat-page-shell .chat-shell main > .border-t textarea { min-width:0 !important; width:100% !important; font-size:14px; }
+  .chat-page-shell .chat-shell main > .border-t button[type="button"] { flex:0 0 44px; }
+}
+@media (max-width: 360px) {
+  .tripora-footer-mobile { padding-left:12px; padding-right:12px; }
+  .chat-page-shell > .chat-page-heading { display:none !important; }
+  .chat-page-shell > .chat-mode-shell { margin-top:8px; margin-bottom:8px; }
+  .chat-page-shell .chat-mode-shell { border-radius:12px; padding:4px; }
+  .chat-page-shell .chat-mode-button { padding:8px 6px !important; font-size:12px !important; gap:4px !important; }
+  .chat-page-shell .chat-shell { min-height:400px !important; height:calc(100dvh - 92px) !important; border-radius:10px !important; }
+  .chat-page-shell .chat-shell main header .chat-avatar { width:30px !important; height:30px !important; }
+  .chat-page-shell .chat-shell main header p { max-width:32vw; font-size:12px !important; }
+  .chat-page-shell .chat-message-scroll { padding:10px !important; }
+  .chat-page-shell .chat-message-scroll .chat-message > div { max-width:92% !important; padding:8px 10px !important; font-size:12px !important; }
+  .chat-page-shell .chat-shell main > .border-t { padding:6px !important; }
+  .chat-page-shell .chat-shell main > .border-t .mb-2 { display:none; }
+}
+@media (max-width: 180px) {
+  .chat-page-shell .chat-mode-button span { display:none; }
+  .chat-page-shell .chat-mode-button { font-size:10px !important; }
+  .chat-page-shell .chat-shell main header .chat-icon-action { display:none; }
+  .chat-page-shell .chat-shell main header { gap:5px !important; }
+  .chat-page-shell .chat-shell main > .border-t button[type="button"] { flex-basis:38px; width:38px; }
+  .tripora-footer-mobile { padding-left:8px; padding-right:8px; }
+}

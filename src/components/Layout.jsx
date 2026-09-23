@@ -34,14 +34,28 @@ const avatarOf = (user) => user?.profilePhoto || user?.avatar || user?.avatarUrl
 
 export function Footer({ onComingSoon }) {
   const comingSoon = (label) => onComingSoon?.(label);
-  return <footer className="tripora-footer mt-auto border-t px-6 py-12 lg:px-8">
-    <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
-      <div><div className="flex items-center gap-2"><span className="grid h-9 w-9 place-items-center rounded-xl bg-[#123b30] text-[#9ee8c0]"><Compass size={18}/></span><span className="text-lg font-black">tripora</span></div><p className="tp-muted mt-4 max-w-sm text-sm leading-6">Discover trips, save favorites, book experiences and share journeys with the Tripora community.</p></div>
-      <div><p className="font-extrabold">Explore</p><div className="tp-muted mt-4 space-y-3 text-sm"><Link className="block hover:text-[#3b8f68]" to="/trips">All trips</Link><Link className="block hover:text-[#3b8f68]" to="/favorites">Favorites</Link><Link className="block hover:text-[#3b8f68]" to="/create-trip">Post a trip</Link></div></div>
-      <div><p className="font-extrabold">Company</p><div className="tp-muted mt-4 space-y-3 text-sm"><a className="block hover:text-[#3b8f68]" href="mailto:hello@tripora.example">Contact us</a><a className="block hover:text-[#3b8f68]" href="mailto:support@tripora.example">Support</a><button type="button" className="block text-left hover:text-[#3b8f68]" onClick={() => comingSoon("About Tripora")}>About Tripora</button></div></div>
-      <div><p className="font-extrabold">Follow</p><div className="tp-muted mt-4 space-y-3 text-sm"><button type="button" className="block text-left hover:text-[#3b8f68]" onClick={() => comingSoon("Instagram")}>Instagram</button><button type="button" className="block text-left hover:text-[#3b8f68]" onClick={() => comingSoon("TikTok")}>TikTok</button><button type="button" className="block text-left hover:text-[#3b8f68]" onClick={() => comingSoon("X")}>X</button></div></div>
+  return <footer className="tripora-footer mt-auto border-t">
+    <div className="tripora-footer-desktop mx-auto max-w-7xl px-6 py-12 lg:px-8">
+      <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
+        <div><div className="flex items-center gap-2"><span className="grid h-9 w-9 place-items-center rounded-xl bg-[#123b30] text-[#9ee8c0]"><Compass size={18}/></span><span className="text-lg font-black">tripora</span></div><p className="tp-muted mt-4 max-w-sm text-sm leading-6">Discover trips, save favorites, book experiences and share journeys with the Tripora community.</p></div>
+        <div><p className="font-extrabold">Explore</p><div className="tp-muted mt-4 space-y-3 text-sm"><Link className="block hover:text-[#3b8f68]" to="/trips">All trips</Link><Link className="block hover:text-[#3b8f68]" to="/favorites">Favorites</Link><Link className="block hover:text-[#3b8f68]" to="/create-trip">Post a trip</Link></div></div>
+        <div><p className="font-extrabold">Company</p><div className="tp-muted mt-4 space-y-3 text-sm"><a className="block hover:text-[#3b8f68]" href="mailto:hello@tripora.example">Contact us</a><a className="block hover:text-[#3b8f68]" href="mailto:support@tripora.example">Support</a><button type="button" className="block text-left hover:text-[#3b8f68]" onClick={() => comingSoon("About Tripora")}>About Tripora</button></div></div>
+        <div><p className="font-extrabold">Follow</p><div className="tp-muted mt-4 space-y-3 text-sm"><button type="button" className="block text-left hover:text-[#3b8f68]" onClick={() => comingSoon("Instagram")}>Instagram</button><button type="button" className="block text-left hover:text-[#3b8f68]" onClick={() => comingSoon("TikTok")}>TikTok</button><button type="button" className="block text-left hover:text-[#3b8f68]" onClick={() => comingSoon("X")}>X</button></div></div>
+      </div>
+      <div className="mx-auto mt-10 flex max-w-7xl flex-wrap justify-between gap-3 border-t pt-5 text-xs tp-muted"><span>© 2026 Tripora. All rights reserved.</span><span>Travel smarter. Experience more.</span></div>
     </div>
-    <div className="mx-auto mt-10 flex max-w-7xl flex-wrap justify-between gap-3 border-t pt-5 text-xs tp-muted"><span>© 2026 Tripora. All rights reserved.</span><span>Travel smarter. Experience more.</span></div>
+
+    <div className="tripora-footer-mobile">
+      <div className="tripora-footer-brand"><span className="grid h-9 w-9 place-items-center rounded-xl bg-[#123b30] text-[#9ee8c0]"><Compass size={18}/></span><span className="text-lg font-black">tripora</span></div>
+      <p className="tp-muted mt-3 text-sm leading-6">Discover trips, save favorites, book experiences and share journeys with the Tripora community.</p>
+      <div className="tripora-footer-accordions mt-5">
+        <details open><summary>Support</summary><div className="tripora-footer-links"><a href="mailto:hello@tripora.example">Contact us</a><a href="mailto:support@tripora.example">Support</a></div></details>
+        <details><summary>Discover</summary><div className="tripora-footer-links"><Link to="/trips">All trips</Link><Link to="/favorites">Favorites</Link><Link to="/create-trip">Post a trip</Link></div></details>
+        <details><summary>Company</summary><div className="tripora-footer-links"><button type="button" onClick={() => comingSoon("About Tripora")}>About Tripora</button></div></details>
+        <details><summary>Follow</summary><div className="tripora-footer-links"><button type="button" onClick={() => comingSoon("Instagram")}>Instagram</button><button type="button" onClick={() => comingSoon("TikTok")}>TikTok</button><button type="button" onClick={() => comingSoon("X")}>X</button></div></details>
+      </div>
+      <div className="tripora-footer-mobile-copy">© 2026 Tripora. All rights reserved.<br/>Travel smarter. Experience more.</div>
+    </div>
   </footer>;
 }
 
