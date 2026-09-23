@@ -68,7 +68,7 @@ textarea { line-height: 1.55; }
 
 .btn, .auth-submit {
   display: inline-flex; width: 100%; min-height: 44px; align-items: center; justify-content: center; gap: .5rem;
-  border: 0; border-radius: 12px; background: var(--tp-accent); color: #06251b; padding: .7rem 1rem; font-weight: 800;
+  border: 0; border-radius: 12px; background: var(--tp-accent); color: #ffffff; padding: .7rem 1rem; font-weight: 800;
   transition: transform .18s ease, filter .18s ease, opacity .18s ease;
 }
 .btn:hover, .auth-submit:hover { filter: brightness(1.04); transform: translateY(-1px); }
@@ -108,7 +108,7 @@ textarea { line-height: 1.55; }
 /* Existing dark utility classes are normalized safely using exact class tokens.
    Attribute selectors avoid the malformed arbitrary-class selectors that caused
    the previous theme parser failure. */
-:root[data-theme="light"] [class~="text-white"] { color:#17251f !important; }
+:root[data-theme="light"] [class~="text-white"] { color:#fcfefd !important; }
 :root[data-theme="light"] [class~="text-[#edf4f2]"],
 :root[data-theme="light"] [class~="text-[#eef5f3]"],
 :root[data-theme="light"] [class~="text-[#e9f2ef]"],
